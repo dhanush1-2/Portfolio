@@ -1,48 +1,59 @@
-import type { Metadata } from "next";
-import { Inter, IBM_Plex_Mono } from "next/font/google";
-import "./globals.css";
+import type { Metadata } from 'next'
+import { Playfair_Display, Inter, JetBrains_Mono, Rye } from 'next/font/google'
+import CinematicLoader from '@/components/CinematicLoader'
+import './globals.css'
+
+const playfairDisplay = Playfair_Display({
+  subsets: ['latin'],
+  variable: '--font-playfair',
+  display: 'swap',
+})
 
 const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-});
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+})
 
-const plexMono = IBM_Plex_Mono({
-  variable: "--font-ibm-plex-mono",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  variable: '--font-jetbrains',
+  display: 'swap',
+})
+
+const rye = Rye({
+  weight: '400',
+  subsets: ['latin'],
+  variable: '--font-rye',
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
-  title: "Dhanush Chandra Shekar | AI Engineer",
-  description: "Portfolio of Dhanush Chandra Shekar, an AI Engineer specializing in RAG pipelines, Agentic workflows, and Fine-tuned models.",
-};
+  title: 'Dhanush Chandra Shekar — AI/ML Engineer',
+  description:
+    'Data Scientist & Systems Engineer specializing in production-grade intelligent infrastructure, distributed multi-agent workflows, and structural knowledge graph integration.',
+  openGraph: {
+    title: 'Dhanush Chandra Shekar — AI/ML Engineer',
+    description:
+      'Data Scientist & Systems Engineer specializing in production-grade intelligent infrastructure, distributed multi-agent workflows, and structural knowledge graph integration.',
+    url: 'https://dhanushc.live',
+    siteName: 'Dhanush Chandra Shekar',
+    type: 'website',
+  },
+}
 
-import { XAIProvider } from "@/context/XAIContext";
-import AgenticTracker from "@/components/AgenticTracker";
-import CommandPalette from "@/components/CommandPalette";
-import SemanticCursor from "@/components/SemanticCursor";
-import ScrollRestorationFix from "@/components/ScrollRestorationFix";
-import SmoothScrolling from "@/components/SmoothScrolling";
-
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body className={`${inter.variable} ${plexMono.variable} antialiased font-sans relative`}>
-        <SmoothScrolling>
-          <XAIProvider>
-            {children}
-            <ScrollRestorationFix />
-            <SemanticCursor />
-            <AgenticTracker />
-            <CommandPalette />
-          </XAIProvider>
-        </SmoothScrolling>
+    <html
+      lang="en"
+      className={`${playfairDisplay.variable} ${inter.variable} ${jetbrainsMono.variable} ${rye.variable}`}
+    >
+      <body>
+        <CinematicLoader />
+        <div className="vignette" aria-hidden="true" />
+        <div className="grain" aria-hidden="true" />
+        {children}
       </body>
     </html>
-  );
+  )
 }
