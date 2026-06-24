@@ -198,6 +198,38 @@ export default function Home() {
           <span className="btn-prompt-icon" style={{ borderColor: 'rgba(255,255,255,0.4)', color: 'rgba(255,255,255,0.7)' }}>↕</span> Navigate
         </div>
       </div>
+
+      {/* Attribution */}
+      <div style={{
+        position: 'fixed',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        zIndex: 9997,
+        background: 'linear-gradient(to top, rgba(4,2,1,0.92) 0%, transparent 100%)',
+        padding: '10px 24px 8px',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        pointerEvents: 'none',
+      }}>
+        <p style={{
+          fontFamily: 'var(--font-mono)',
+          fontSize: '0.5rem',
+          letterSpacing: '0.12em',
+          color: 'rgba(158, 143, 112, 0.45)',
+          textAlign: 'center',
+          lineHeight: '1.6',
+          textTransform: 'uppercase',
+        }}>
+          Visual design & UI aesthetics inspired by{' '}
+          <span style={{ color: 'rgba(212,175,55,0.5)' }}>Red Dead Redemption 2</span>
+          {' '}(2018) ·{' '}
+          <span style={{ color: 'rgba(212,175,55,0.5)' }}>© Rockstar Games / Take-Two Interactive Software, Inc.</span>
+          {' '}· All game trademarks, characters, and intellectual property are the sole property of their respective owners.
+          This is a personal, non-commercial portfolio and is not affiliated with or endorsed by Rockstar Games.
+        </p>
+      </div>
     </div>
   )
 }
