@@ -10,6 +10,7 @@ import Contact from '@/components/Contact'
 import audio from '@/utils/audio'
 import DustParticles from '@/components/DustParticles'
 import BackgroundMusic from '@/components/BackgroundMusic'
+import ChapterCard from '@/components/ChapterCard'
 
 type TabItem = {
   label: string
@@ -70,10 +71,22 @@ export default function Home() {
   const gamepadRef = useRef<number | null>(null)
   const buttonStatesRef = useRef<{ [key: number]: boolean }>({})
   const isNavigatingRef = useRef(false)
+  const boundaryRef = useRef<{ dir: 1 | -1; hitAt: number } | null>(null)
+  const prevTabRef = useRef(-1)
+  const [chapterTab, setChapterTab] = useState<number | null>(null)
 
   useEffect(() => {
     setIsMuted(audio.isMuted())
   }, [])
+
+  // Cinematic chapter card on section change
+  useEffect(() => {
+    if (prevTabRef.current === -1) { prevTabRef.current = activeTab; return }
+    prevTabRef.current = activeTab
+    setChapterTab(activeTab)
+    const t = setTimeout(() => setChapterTab(null), 1400)
+    return () => clearTimeout(t)
+  }, [activeTab])
 
   const toggleMute = () => {
     const nextMuted = !isMuted
@@ -127,25 +140,44 @@ export default function Home() {
     const handleWheel = (e: WheelEvent) => {
       if (isNavigatingRef.current) { e.preventDefault(); return }
 
-      // If the cursor is inside a scrollable booklet that can still scroll, let it
+      const dir = e.deltaY > 0 ? 1 : -1 as 1 | -1
       const booklet = (e.target as Element).closest('.booklet-container') as HTMLElement | null
+
       if (booklet) {
         const { scrollTop, scrollHeight, clientHeight } = booklet
-        if (e.deltaY > 0 && scrollTop + clientHeight < scrollHeight - 5) return
-        if (e.deltaY < 0 && scrollTop > 5) return
+        const atBottom = scrollTop + clientHeight >= scrollHeight - 5
+        const atTop = scrollTop <= 5
+
+        // Booklet still has room to scroll — let it, reset boundary tracker
+        if (dir > 0 && !atBottom) { boundaryRef.current = null; return }
+        if (dir < 0 && !atTop)    { boundaryRef.current = null; return }
+
+        // At boundary — guard against trackpad momentum triggering section jump
+        const now = Date.now()
+        if (!boundaryRef.current || boundaryRef.current.dir !== dir) {
+          // First event hitting this boundary — record it, don't navigate yet
+          boundaryRef.current = { dir, hitAt: now }
+          e.preventDefault()
+          return
+        }
+        if (now - boundaryRef.current.hitAt < 600) {
+          // Still within 600ms — likely momentum, block navigation
+          e.preventDefault()
+          return
+        }
+        // 600ms passed with continued scroll intent — treat as deliberate navigation
+        boundaryRef.current = null
+      } else {
+        boundaryRef.current = null
       }
 
       e.preventDefault()
       isNavigatingRef.current = true
-
-      if (e.deltaY > 0) {
-        audio.playHover()
-        setActiveTab(prev => Math.min(prev + 1, TABS.length - 1))
-      } else if (e.deltaY < 0) {
-        audio.playHover()
-        setActiveTab(prev => Math.max(prev - 1, 0))
-      }
-
+      audio.playHover()
+      setActiveTab(prev => dir > 0
+        ? Math.min(prev + 1, TABS.length - 1)
+        : Math.max(prev - 1, 0)
+      )
       setTimeout(() => { isNavigatingRef.current = false }, 900)
     }
 
@@ -159,6 +191,7 @@ export default function Home() {
     <div className="rdr2-pause-screen">
       <DustParticles />
       <BackgroundMusic />
+      <ChapterCard chapter={chapterTab !== null ? { index: chapterTab, label: TABS[chapterTab].label } : null} />
 
       {/* Sidebar */}
       <Sidebar
@@ -215,17 +248,17 @@ export default function Home() {
       }}>
         <p style={{
           fontFamily: 'var(--font-mono)',
-          fontSize: '0.5rem',
-          letterSpacing: '0.12em',
-          color: 'rgba(158, 143, 112, 0.45)',
+          fontSize: '0.62rem',
+          letterSpacing: '0.1em',
+          color: 'rgba(185, 168, 130, 0.75)',
           textAlign: 'center',
-          lineHeight: '1.6',
+          lineHeight: '1.7',
           textTransform: 'uppercase',
         }}>
           Visual design & UI aesthetics inspired by{' '}
-          <span style={{ color: 'rgba(212,175,55,0.5)' }}>Red Dead Redemption 2</span>
+          <span style={{ color: 'rgba(212,175,55,0.85)' }}>Red Dead Redemption 2</span>
           {' '}(2018) ·{' '}
-          <span style={{ color: 'rgba(212,175,55,0.5)' }}>© Rockstar Games / Take-Two Interactive Software, Inc.</span>
+          <span style={{ color: 'rgba(212,175,55,0.85)' }}>© Rockstar Games / Take-Two Interactive Software, Inc.</span>
           {' '}· All game trademarks, characters, and intellectual property are the sole property of their respective owners.
           This is a personal, non-commercial portfolio and is not affiliated with or endorsed by Rockstar Games.
         </p>

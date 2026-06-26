@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Playfair_Display, Inter, JetBrains_Mono, Rye } from 'next/font/google'
 import CinematicLoader from '@/components/CinematicLoader'
+import CustomCursor from '@/components/CustomCursor'
 import './globals.css'
 
 const playfairDisplay = Playfair_Display({
@@ -50,6 +51,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       <body>
         <CinematicLoader />
+        <CustomCursor />
         <div className="vignette" aria-hidden="true" />
         <div className="grain" aria-hidden="true" />
         {children}

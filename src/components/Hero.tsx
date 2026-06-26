@@ -1,6 +1,8 @@
 'use client'
 
+import { useState } from 'react'
 import { motion } from 'framer-motion'
+import WantedPoster from '@/components/WantedPoster'
 
 const STATS = [
   { label: 'ROLE', value: 'AI/ML Engineer · Systems Builder' },
@@ -12,7 +14,10 @@ const STATS = [
 ]
 
 export default function Hero() {
+  const [showPoster, setShowPoster] = useState(false)
+
   return (
+    <>
     <div className="booklet-container" style={{
       backgroundImage: `linear-gradient(rgba(241,235,217,0.76), rgba(241,235,217,0.88)), url("/assets/tumbleweed_bg.png")`,
       backgroundSize: '100% 100%, cover',
@@ -36,7 +41,7 @@ export default function Hero() {
               "Turning data into decisions and models into products"
             </p>
             <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.92rem', lineHeight: '1.75', color: '#302014' }}>
-              I'm an AI/ML Engineer and MS Data Science student at Indiana University (graduating 2026), with a strong foundation in machine learning, NLP, and data engineering. I enjoy building end-to-end systems — from raw data pipelines to deployed AI-powered products. My work spans everything from fine-tuning LLMs and building RAG systems to production MLOps pipelines and full-stack AI applications.
+              I&apos;m an AI/ML Engineer and MS Data Science student at Indiana University (graduating 2026), with a strong foundation in machine learning, NLP, and data engineering. I enjoy building end-to-end systems — from raw data pipelines to deployed AI-powered products. My work spans everything from fine-tuning LLMs and building RAG systems to production MLOps pipelines and full-stack AI applications.
             </p>
           </div>
 
@@ -105,15 +110,6 @@ export default function Hero() {
                   </svg>
                 ),
               },
-              {
-                label: 'Resume',
-                href: 'https://drive.google.com/file/d/1McFAVDDGbraRk7BkDolprtWaDEtDYxV6/view?usp=drive_link',
-                icon: (
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
-                  </svg>
-                ),
-              },
             ].map(({ label, href, icon }) => (
               <a
                 key={label}
@@ -147,10 +143,47 @@ export default function Hero() {
                 {icon}
               </a>
             ))}
+
+            {/* Resume — opens Wanted Poster */}
+            <button
+              onClick={() => setShowPoster(true)}
+              title="Resume"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '30px',
+                height: '30px',
+                border: '1px solid rgba(26,0,0,0.22)',
+                color: '#5a4a3a',
+                background: 'transparent',
+                cursor: 'pointer',
+                transition: 'color 0.2s ease, border-color 0.2s ease, background 0.2s ease',
+              }}
+              onMouseEnter={e => {
+                const el = e.currentTarget
+                el.style.color = '#7a0c0c'
+                el.style.borderColor = '#7a0c0c'
+                el.style.background = 'rgba(122,12,12,0.06)'
+              }}
+              onMouseLeave={e => {
+                const el = e.currentTarget
+                el.style.color = '#5a4a3a'
+                el.style.borderColor = 'rgba(26,0,0,0.22)'
+                el.style.background = 'transparent'
+              }}
+            >
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+              </svg>
+            </button>
           </div>
         </div>
 
       </div>
     </div>
+
+    {showPoster && <WantedPoster onClose={() => setShowPoster(false)} />}
+    </>
   )
 }

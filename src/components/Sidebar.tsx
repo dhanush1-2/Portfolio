@@ -185,12 +185,10 @@ export default function Sidebar({
   isMuted,
   toggleMute,
 }: SidebarProps) {
-  const [mobileOpen, setMobileOpen] = useState(false)
 
   const handleNav = useCallback((e: React.MouseEvent<HTMLAnchorElement>, index: number) => {
     e.preventDefault()
     setActiveTab(index)
-    setMobileOpen(false)
   }, [setActiveTab])
 
   return (
@@ -222,70 +220,53 @@ export default function Sidebar({
 
           {/* Nav */}
           <nav className="sidebar-nav">
-            <ul className="sidebar-nav-list">
-              {tabs.map((tab, index) => (
-                <li key={tab.id} className="sidebar-nav-item">
-                  <a
-                    href={`#${tab.id}`}
-                    className={`sidebar-link${activeTab === index ? ' active' : ''}`}
-                    onClick={(e) => handleNav(e, index)}
-                  >
-                    {tab.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
+            <div style={{ position: 'relative' }}>
+              {/* Trail track line */}
+              <div style={{
+                position: 'absolute',
+                left: '-14px',
+                top: '8px',
+                bottom: '8px',
+                width: '1px',
+                background: 'rgba(212,175,55,0.18)',
+                pointerEvents: 'none',
+              }} />
+              <ul className="sidebar-nav-list">
+                {tabs.map((tab, index) => (
+                  <li key={tab.id} className="sidebar-nav-item">
+                    {activeTab === index && (
+                      <motion.div
+                        layoutId="trail-marker"
+                        style={{
+                          position: 'absolute',
+                          left: '-18px',
+                          top: '50%',
+                          marginTop: '-3px',
+                          width: '6px',
+                          height: '6px',
+                          borderRadius: '50%',
+                          background: 'rgba(212,175,55,0.9)',
+                          boxShadow: '0 0 6px rgba(212,175,55,0.5)',
+                        }}
+                        transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                      />
+                    )}
+                    <a
+                      href={`#${tab.id}`}
+                      className={`sidebar-link${activeTab === index ? ' active' : ''}`}
+                      onClick={(e) => handleNav(e, index)}
+                    >
+                      {tab.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </nav>
 
-          {/* Emblem + audio toggle */}
-          <div className="sidebar-dcs" aria-hidden="true">
-            D.C.S<span className="sidebar-dcs-dot">.</span>
-          </div>
-          <button
-            onClick={toggleMute}
-            className="audio-toggle-btn"
-            aria-label={isMuted ? 'Unmute sounds' : 'Mute sounds'}
-          >
-            {isMuted ? '🔊 UNMUTE' : '🔇 MUTE'}
-          </button>
         </div>
       </motion.aside>
 
-      {/* ── MOBILE TOGGLE ── */}
-      <button
-        className="sidebar-mobile-btn"
-        onClick={() => setMobileOpen((v) => !v)}
-        aria-label="Toggle navigation"
-      >
-        <span className={`mobile-icon${mobileOpen ? ' open' : ''}`}>&#9776;</span>
-      </button>
-
-      {/* ── MOBILE OVERLAY ── */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            className="sidebar-mobile-overlay"
-            initial={{ opacity: 0, x: -40 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -40 }}
-            transition={{ duration: 0.3 }}
-          >
-            <ul className="sidebar-mobile-list">
-              {tabs.map((tab, index) => (
-                <li key={tab.id}>
-                  <a
-                    href={`#${tab.id}`}
-                    className={`sidebar-link${activeTab === index ? ' active' : ''}`}
-                    onClick={(e) => handleNav(e, index)}
-                  >
-                    {tab.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </>
   )
 }
