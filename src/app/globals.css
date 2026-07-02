@@ -93,6 +93,28 @@ a {
   z-index: 100;
 }
 
+.header-nav-list {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.header-nav-container {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.desktop-brand {
+  display: inline;
+}
+
+.mobile-brand {
+  display: none;
+}
+
 .content-area {
   width: 100%;
   max-width: 1000px;
@@ -118,10 +140,37 @@ a {
     gap: 12px;
     padding: 14px 16px;
     text-align: center;
+    align-items: center;
+  }
+  .header-nav-container {
+    width: 100%;
+    justify-content: center;
+  }
+  .header-nav-list {
+    gap: 16px;
+    overflow-x: auto;
+    width: 100%;
+    justify-content: center;
+    padding-bottom: 2px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .header-nav-list::-webkit-scrollbar {
+    display: none;
   }
   .content-area {
     padding: 30px 16px 60px;
     gap: 60px;
+  }
+}
+
+@media (max-width: 480px) {
+  .desktop-brand {
+    display: none;
+  }
+  .mobile-brand {
+    display: inline;
+    font-weight: bold;
   }
 }
 
@@ -520,6 +569,12 @@ section {
   font-size: 0.6rem;
   letter-spacing: 0.05em;
   box-shadow: 2px 2px 0px var(--color-border);
+}
+
+@media (max-width: 640px) {
+  .control-prompts {
+    display: none;
+  }
 }
 
 /* blink animation */

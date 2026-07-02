@@ -27,18 +27,19 @@ export default function Header({ tabs, activeTab }: HeaderProps) {
       <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
         <a href="#about" onClick={(e) => handleNav(e, 'about')} style={{ display: 'block' }}>
           <h1 className="mono-text" style={{ fontSize: '1.1rem', fontWeight: 'bold', letterSpacing: '0.02em', textTransform: 'uppercase' }}>
-            Dhanush Chandra Shekar
+            <span className="desktop-brand">Dhanush Chandra Shekar</span>
+            <span className="mobile-brand">Dhanush C.</span>
           </h1>
         </a>
       </div>
 
       {/* Centered links */}
-      <nav>
-        <ul style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
+      <nav className="header-nav-container">
+        <ul className="header-nav-list">
           {tabs.map((tab, index) => {
             const isActive = activeTab === index
             return (
-              <li key={tab.id} style={{ listStyle: 'none' }}>
+              <li key={tab.id}>
                 <a
                   href={`#${tab.id}`}
                   onClick={(e) => handleNav(e, tab.id)}
@@ -50,6 +51,7 @@ export default function Header({ tabs, activeTab }: HeaderProps) {
                     borderBottom: isActive ? '1.5px solid var(--color-border)' : '1.5px solid transparent',
                     paddingBottom: '2px',
                     transition: 'all 0.2s ease',
+                    whiteSpace: 'nowrap',
                   }}
                 >
                   {tab.label}
