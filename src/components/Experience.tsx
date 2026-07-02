@@ -4,102 +4,116 @@ import { motion } from 'framer-motion'
 
 const ENTRIES = [
   {
-    period: '2024 — PRESENT',
+    period: '2024 to Present',
     role: 'Faculty Assistant in Data Science',
     org: 'Indiana University · Kelley School of Business',
-    location: 'Bloomington, Indiana',
-    bullets: [
-      'Instruct and guide graduate-level scholars through complex data cleaning protocols, descriptive statistics, and linear regression analysis frameworks.',
-      'Architect and maintain scalable academic computing labs utilizing specialized analytics frameworks and production-grade tooling.',
-      'Design structured assessment workflows that translate theoretical ML concepts into applied, reproducible engineering practices.',
-    ],
+    location: 'Bloomington, IN',
+    description:
+      'Instruct graduate students through data cleaning, statistics, and regression analysis. Architect scalable academic computing labs and design assessment workflows translating ML theory into reproducible engineering practices.',
+    tags: ['Teaching', 'Data Science', 'Python', 'Statistics'],
   },
   {
-    period: '2024 — 2026',
-    role: 'MS Candidate in Data Science',
+    period: '2024 to 2026',
+    role: 'MS in Data Science',
     org: 'Indiana University Bloomington',
-    location: 'Bloomington, Indiana',
-    bullets: [
-      'Pursuing Master of Science in Data Science with a core focus on Machine Learning, Natural Language Processing, and scalable Data Engineering architectures.',
-      'Researching and implementing systems in advanced databases (SQL, Neo4j Graph Systems, vector databases ChromaDB/FAISS), distributed state pipelines, and MLOps principles.',
-      'Maintained a solid standard of excellence, translating academic ML research into production-ready full-stack applications.',
-    ],
+    location: 'Bloomington, IN',
+    description:
+      'Focused on Machine Learning, NLP, and scalable Data Engineering. Research in graph databases, vector search, distributed pipelines, and MLOps, translating academic research into production ready applications.',
+    tags: ['ML', 'NLP', 'Neo4j', 'MLOps', 'PyTorch'],
   },
 ]
 
 export default function Experience() {
   return (
-    <div className="booklet-container" style={{
-      backgroundImage: `linear-gradient(rgba(241,235,217,0.76), rgba(241,235,217,0.76)), url("/assets/journal_bg.png")`,
-      backgroundSize: '100% 100%, cover',
-      backgroundPosition: 'center, center',
-    }}>
-
-      {/* Booklet Header */}
-      <div className="booklet-header">
-        <h2 className="booklet-title" style={{ fontFamily: 'var(--font-header)', fontStyle: 'italic' }}>Experience</h2>
-        <span className="booklet-stamp" style={{ transform: 'rotate(2.5deg)', borderColor: '#4a3a2a', color: '#4a3a2a' }}>2024 — PRESENT</span>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+      
+      {/* Header */}
+      <div>
+        <span className="nav-text" style={{ fontSize: '0.72rem', color: 'var(--color-text-muted)', display: 'block', marginBottom: '8px' }}>
+          background
+        </span>
+        <h2 style={{ fontSize: '2.4rem', fontWeight: 'bold' }}>Experience</h2>
       </div>
 
-      <div style={{ position: 'relative', zIndex: 5, color: '#2b1c10', textAlign: 'left' }}>
-        <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: '#7a5a3a', marginBottom: '28px', maxWidth: '650px', lineHeight: '1.6', letterSpacing: '0.1em' }}>
-          INDIANA UNIVERSITY · BLOOMINGTON, IN · 39.1653° N, 86.5264° W
-        </p>
+      {/* Horizontal Scrollable Timeline */}
+      <div className="horizontal-timeline-container">
+        
+        {/* Horizontal Axis Axis Line */}
+        <div className="horizontal-timeline-axis" />
 
-        {ENTRIES.map((entry, idx) => (
-          <div 
-            key={idx} 
-            style={{ 
-              borderLeft: '2px solid #5a4838', 
-              paddingLeft: '24px', 
-              marginLeft: '8px', 
-              marginBottom: '36px',
-              fontFamily: 'var(--font-header)'
-            }}
-          >
-            {/* Timestamp & Info */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginBottom: '16px' }}>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: '#7a5a3a', letterSpacing: '0.15em', fontWeight: 'bold' }}>
-                {entry.period} // {entry.location.toUpperCase()}
-              </span>
-              <h3 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#1a0d06', margin: '4px 0' }}>
-                {entry.role}
-              </h3>
-              <span style={{ fontSize: '1rem', color: '#4a3625', fontStyle: 'italic' }}>
-                {entry.org}
-              </span>
+        {/* Track holding the items */}
+        <div className="horizontal-timeline-track">
+          {ENTRIES.map((entry, idx) => (
+            <div key={idx} className="horizontal-timeline-item">
+              
+              {/* Central axis dot */}
+              <div className="horizontal-timeline-dot" />
+
+              {/* Vertical connector to card */}
+              <div className="horizontal-timeline-connector" />
+
+              {/* Slide item card */}
+              <motion.div
+                className="horizontal-timeline-card"
+                initial={{ opacity: 0, x: 50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: '-20px' }}
+                transition={{ duration: 0.5, delay: idx * 0.1, ease: 'easeOut' }}
+              >
+                {/* Period & Location metadata */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '16px', flexWrap: 'wrap', gap: '8px' }}>
+                  <span className="mono-text" style={{ fontSize: '0.88rem', fontWeight: 'bold', color: 'var(--color-text-primary)' }}>
+                    {entry.period}
+                  </span>
+                  <span className="nav-text" style={{ fontSize: '0.68rem', color: 'var(--color-text-muted)', letterSpacing: '0.06em' }}>
+                    {entry.location}
+                  </span>
+                </div>
+
+                {/* Role Details */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  <div>
+                    <h3 style={{ fontSize: '1.35rem', fontWeight: 'bold', color: 'var(--color-text-primary)', marginBottom: '4px', lineHeight: '1.2' }}>
+                      {entry.role}
+                    </h3>
+                    <span className="mono-text" style={{ fontSize: '0.92rem', color: 'var(--color-text-muted)' }}>
+                      {entry.org}
+                    </span>
+                  </div>
+
+                  <p style={{ fontSize: '0.95rem', lineHeight: 1.6, color: 'var(--color-text-muted)' }}>
+                    {entry.description}
+                  </p>
+
+                  {/* Tags list */}
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '6px' }}>
+                    {entry.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="mono-text"
+                        style={{
+                          fontSize: '0.72rem',
+                          border: '1px solid var(--color-border)',
+                          padding: '3px 12px',
+                          borderRadius: '100px',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.04em',
+                          background: 'var(--color-bg)',
+                        }}
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+              </motion.div>
             </div>
-
-            {/* Bullets styled like diary logs */}
-            <ul style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-              {entry.bullets.map((bullet, bIdx) => (
-                <li 
-                  key={bIdx} 
-                  style={{ 
-                    fontFamily: 'var(--font-body)', 
-                    fontSize: '0.92rem', 
-                    lineHeight: '1.65', 
-                    color: '#302014',
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                    gap: '12px'
-                  }}
-                >
-                  <span style={{ color: '#7a5a3a', fontFamily: 'var(--font-mono)', fontSize: '0.8rem', marginTop: '2px' }}>—</span>
-                  <span>{bullet}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-
-        {/* Decorative journal flourish at bottom (pencil line / map coordinates) */}
-        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '40px', opacity: 0.5 }}>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.2em', color: '#4a3a2a' }}>
-            ◆ &nbsp; INDIANA UNIVERSITY · KELLEY SCHOOL OF BUSINESS &nbsp; ◆
-          </span>
+          ))}
         </div>
+
       </div>
+
     </div>
   )
 }

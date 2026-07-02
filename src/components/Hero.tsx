@@ -1,189 +1,194 @@
 'use client'
 
-import { useState } from 'react'
-import { motion } from 'framer-motion'
-import WantedPoster from '@/components/WantedPoster'
+import { useState, useEffect } from 'react'
 
-const STATS = [
-  { label: 'ROLE', value: 'AI/ML Engineer · Systems Builder' },
-  { label: 'EDUCATION', value: 'MS Data Science · Indiana University 2026' },
-  { label: 'AFFILIATION', value: 'Kelley School of Business · Bloomington, IN' },
-  { label: 'SPECIALISATION', value: 'LLMs · RAG · MLOps · Full-Stack AI' },
-  { label: 'AVAILABILITY', value: 'Open to Full-Time Roles — 2026', highlight: true },
-  { label: 'LANGUAGES', value: 'Python · TypeScript · C · SQL' },
+const DYNAMIC_TAGS: Record<string, string> = {
+  Q: 'Query optimization through indexing and profiling SQL database structures',
+  W: 'Workflow automation for deploying CI/CD runs via GitHub Actions',
+  E: 'End to end MLOps including pipeline stages and model drift monitoring',
+  R: 'Retrieval Augmented Generation for semantic search over documents',
+  T: 'Transformer architectures for training custom encoder decoder models',
+  Y: 'Yield performance tracking and data health metrics telemetry',
+  U: 'Unified API gateways for orchestrating multi provider LLM calls',
+  I: 'Intelligent agents and LangGraph multi agent state orchestration',
+  O: 'Output controls enforcing structured JSON response schemas',
+  P: 'PyTorch CUDA configurations and parallel tensor operations',
+  A: 'AI ML systems builder designing end to end infrastructures',
+  S: 'Star schema design for dimensional modeling in analytics pipelines',
+  D: 'Deep learning for training custom neural networks from scratch',
+  F: 'Fine tuning LLMs utilizing targeted instruction validation',
+  G: 'Graph modeling traversing Neo4j knowledge graph databases',
+  H: 'Hyperparameter sweeps boosting convergence and model accuracy',
+  J: 'Jupyter research for exploratory data analysis and prototyping',
+  K: 'Knowledge graphs using GraphRAG for context aware retrieval',
+  L: 'Latency tuning for reducing API response cycles and caching',
+  Z: 'Zero shot learning for generalized classification without labels',
+  X: 'XGBoost ensembles for gradient boosted prediction models',
+  C: 'Clean architecture for modular testable production ready code',
+  V: 'Vector databases for ChromaDB and FAISS semantic indexing',
+  B: 'Bayesian modeling for probabilistic inference and uncertainty',
+  N: 'Neural network optimization such as pruning and quantization',
+  M: 'Machine translation sequence to sequence NLP pipelines',
+}
+
+const KEYBOARD_ROWS = [
+  ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
+  ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
+  ['Z', 'X', 'C', 'V', 'B', 'N', 'M']
 ]
 
 export default function Hero() {
-  const [showPoster, setShowPoster] = useState(false)
+  const [nameText, setNameText] = useState('')
+  const [subtitleText, setSubtitleText] = useState('')
+  const [activeKey, setActiveKey] = useState<string>('D')
+  const [displayedTagline, setDisplayedTagline] = useState<string>('')
+
+  // Initial typewriter load effect for Name & Title
+  useEffect(() => {
+    let tName: NodeJS.Timeout
+    let tSub: NodeJS.Timeout
+    const name = 'Dhanush Chandra Shekar'
+    const sub = 'AI ML Engineer and Systems Builder'
+
+    let idx1 = 0
+    const typeName = () => {
+      if (idx1 <= name.length) {
+        setNameText(name.slice(0, idx1))
+        idx1++
+        tName = setTimeout(typeName, 80)
+      } else {
+        let idx2 = 0
+        const typeSub = () => {
+          if (idx2 <= sub.length) {
+            setSubtitleText(sub.slice(0, idx2))
+            idx2++
+            tSub = setTimeout(typeSub, 55)
+          }
+        }
+        typeSub()
+      }
+    }
+    typeName()
+
+    return () => {
+      clearTimeout(tName)
+      clearTimeout(tSub)
+    }
+  }, [])
+
+  // Typewriter effect on hovering letter keys
+  const tagLine = DYNAMIC_TAGS[activeKey] || ''
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout
+    setDisplayedTagline('')
+    let idx = 0
+    const typeTagline = () => {
+      if (idx <= tagLine.length) {
+        setDisplayedTagline(tagLine.slice(0, idx))
+        idx++
+        timer = setTimeout(typeTagline, 35)
+      }
+    }
+    typeTagline()
+    return () => clearTimeout(timer)
+  }, [activeKey, tagLine])
 
   return (
-    <>
-    <div className="booklet-container" style={{
-      backgroundImage: `linear-gradient(rgba(241,235,217,0.76), rgba(241,235,217,0.88)), url("/assets/tumbleweed_bg.png")`,
-      backgroundSize: '100% 100%, cover',
-      backgroundPosition: 'center, center',
-    }}>
-      <div className="booklet-header">
-        <h2 className="booklet-title" style={{ fontSize: '1.8rem' }}>About</h2>
-        <span className="booklet-stamp" style={{ borderColor: '#5a4a3a', color: '#5a4a3a' }}>OPEN TO WORK</span>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '36px', textAlign: 'center', alignItems: 'center' }}>
+      
+      {/* Centered Intro Title */}
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <h2 style={{ fontSize: '4.2rem', fontWeight: 900, lineHeight: 1.08, letterSpacing: '-0.03em', color: 'var(--color-text-primary)', minHeight: '4.5rem' }}>
+          {nameText}
+          {nameText.length < 22 && (
+            <span style={{ display: 'inline-block', width: '3px', height: '0.85em', background: 'var(--color-border)', marginLeft: '4px', verticalAlign: 'middle', animation: 'blink-cursor 0.8s step-end infinite' }} />
+          )}
+        </h2>
+        <h3 className="mono-text" style={{ fontSize: '1.5rem', color: 'var(--color-text-muted)', marginTop: '12px', minHeight: '1.8rem' }}>
+          {subtitleText}
+        </h3>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '40px', marginTop: '20px' }}>
+      <p style={{ fontSize: '1.15rem', lineHeight: 1.75, color: 'var(--color-text-muted)', maxWidth: '700px' }}>
+        MS Data Science student at Indiana University graduating 2026. 
+        I build end to end intelligent systems ranging from training models in PyTorch to deploying production MLOps architectures.
+      </p>
 
-        {/* LEFT — Bio */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          <div>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: '#7a5a3a', letterSpacing: '0.2em' }}>[ PROFILE ]</span>
-            <h3 style={{ fontFamily: 'var(--font-header)', fontSize: '1.6rem', color: '#1a0a06', margin: '8px 0 6px' }}>
-              Dhanush Chandra Shekar
-            </h3>
-            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: '#7a5a3a', marginBottom: '16px', letterSpacing: '0.05em', fontStyle: 'italic' }}>
-              "Turning data into decisions and models into products"
-            </p>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.92rem', lineHeight: '1.75', color: '#302014' }}>
-              I&apos;m an AI/ML Engineer and MS Data Science student at Indiana University (graduating 2026), with a strong foundation in machine learning, NLP, and data engineering. I enjoy building end-to-end systems — from raw data pipelines to deployed AI-powered products. My work spans everything from fine-tuning LLMs and building RAG systems to production MLOps pipelines and full-stack AI applications.
-            </p>
-          </div>
-
-          {/* Skill alignment bar */}
-          <div className="honor-slider-container" style={{ background: 'rgba(26,0,0,0.04)', border: '1px solid rgba(26,0,0,0.18)' }}>
-            <div className="honor-slider-label" style={{ color: '#5a4a3a' }}>
-              <span>RESEARCH</span>
-              <span style={{ color: '#7a0c0c' }}>PRODUCTION</span>
-            </div>
-            <div className="honor-slider-track">
-              <div className="honor-slider-center" />
-              <div className="honor-slider-pip" style={{ left: '78%' }}>🤠</div>
-            </div>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', color: '#7a5a3a', marginTop: '8px', letterSpacing: '0.1em', textAlign: 'center' }}>
-              TENDENCY: PRODUCTION-FIRST · CLEAN ARCHITECTURE · END-TO-END OWNERSHIP
-            </div>
-          </div>
-        </div>
-
-        {/* RIGHT — Stats */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: '#7a5a3a', letterSpacing: '0.2em' }}>[ DETAILS ]</span>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-            {STATS.map((s) => (
-              <motion.div
-                key={s.label}
-                style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid rgba(26,0,0,0.15)', paddingBottom: '8px', gap: '16px' }}
-                initial={{ opacity: 0, x: 8 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: '#5a4a3a', flexShrink: 0 }}>{s.label}</span>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: s.highlight ? '#7a0c0c' : '#1a0000', fontWeight: s.highlight ? 'bold' : 'normal', textAlign: 'right' }}>{s.value}</span>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Social links */}
-          <div style={{ display: 'flex', gap: '14px', paddingTop: '14px', borderTop: '1px solid rgba(26,0,0,0.15)', alignItems: 'center' }}>
-            {[
-              {
-                label: 'LinkedIn',
-                href: 'https://linkedin.com/in/dhanush-chandra-shekar',
-                icon: (
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                  </svg>
-                ),
-              },
-              {
-                label: 'GitHub',
-                href: 'https://github.com/dhanush1-2',
-                icon: (
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
-                  </svg>
-                ),
-              },
-              {
-                label: 'Email',
-                href: 'mailto:dhanush12232002@gmail.com',
-                icon: (
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
-                  </svg>
-                ),
-              },
-            ].map(({ label, href, icon }) => (
-              <a
-                key={label}
-                href={href}
-                target={href.startsWith('mailto') ? undefined : '_blank'}
-                rel="noopener noreferrer"
-                title={label}
+      {/* Interactive Keyboard & Console Stack */}
+      <div className="hero-wrapper" style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
+        
+        {/* Tagline display console (positioned ABOVE the keyboard) */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%', alignItems: 'center' }}>
+          <span className="nav-text" style={{ fontSize: '0.6rem', color: 'var(--color-text-muted)', letterSpacing: '0.15em' }}>
+            [ active parameter ]
+          </span>
+          <div className="tagline-console" style={{ minHeight: '80px', padding: '16px 24px', borderRadius: '12px', width: '100%', maxWidth: '780px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <span className="mono-text" style={{ fontSize: '1.25rem', color: 'var(--color-text-primary)', fontWeight: 'bold' }}>
+              {displayedTagline}
+              <span
+                aria-hidden="true"
                 style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  width: '30px',
-                  height: '30px',
-                  border: '1px solid rgba(26,0,0,0.22)',
-                  color: '#5a4a3a',
-                  transition: 'color 0.2s ease, border-color 0.2s ease, background 0.2s ease',
+                  display: 'inline-block',
+                  width: '2.5px',
+                  height: '1.1em',
+                  background: 'var(--color-border)',
+                  marginLeft: '6px',
+                  verticalAlign: 'middle',
+                  animation: 'blink-cursor 0.8s step-end infinite',
                 }}
-                onMouseEnter={e => {
-                  const el = e.currentTarget
-                  el.style.color = '#7a0c0c'
-                  el.style.borderColor = '#7a0c0c'
-                  el.style.background = 'rgba(122,12,12,0.06)'
-                }}
-                onMouseLeave={e => {
-                  const el = e.currentTarget
-                  el.style.color = '#5a4a3a'
-                  el.style.borderColor = 'rgba(26,0,0,0.22)'
-                  el.style.background = 'transparent'
-                }}
-              >
-                {icon}
-              </a>
-            ))}
-
-            {/* Resume — opens Wanted Poster */}
-            <button
-              onClick={() => setShowPoster(true)}
-              title="Resume"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '30px',
-                height: '30px',
-                border: '1px solid rgba(26,0,0,0.22)',
-                color: '#5a4a3a',
-                background: 'transparent',
-                cursor: 'pointer',
-                transition: 'color 0.2s ease, border-color 0.2s ease, background 0.2s ease',
-              }}
-              onMouseEnter={e => {
-                const el = e.currentTarget
-                el.style.color = '#7a0c0c'
-                el.style.borderColor = '#7a0c0c'
-                el.style.background = 'rgba(122,12,12,0.06)'
-              }}
-              onMouseLeave={e => {
-                const el = e.currentTarget
-                el.style.color = '#5a4a3a'
-                el.style.borderColor = 'rgba(26,0,0,0.22)'
-                el.style.background = 'transparent'
-              }}
-            >
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
-              </svg>
-            </button>
+              />
+            </span>
           </div>
         </div>
 
-      </div>
-    </div>
+        {/* Keyboard layout */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%', alignItems: 'center' }}>
+          <span className="nav-text" style={{ fontSize: '0.6rem', color: 'var(--color-text-muted)', letterSpacing: '0.15em' }}>
+            hover to explore
+          </span>
+          
+          <div className="keyboard-container">
+            {KEYBOARD_ROWS.map((row, rIdx) => (
+              <div key={rIdx} className="keyboard-row" style={{ paddingLeft: rIdx === 1 ? 'var(--keyboard-stagger)' : rIdx === 2 ? 'calc(var(--keyboard-stagger) * 2)' : '0px' }}>
+                {row.map((key) => (
+                  <div
+                    key={key}
+                    className={`keycap${activeKey === key ? ' pressed' : ''}`}
+                    onMouseEnter={() => setActiveKey(key)}
+                    onClick={() => setActiveKey(key)}
+                  >
+                    {key}
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
 
-    {showPoster && <WantedPoster onClose={() => setShowPoster(false)} />}
-    </>
+        {/* Social outline pills (placed below the keyboard) */}
+        <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap', marginTop: '8px' }}>
+          <a
+            href="https://drive.google.com/file/d/1McFAVDDGbraRk7BkDolprtWaDEtDYxV6/view?usp=drive_link"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="social-pill"
+          >
+            Resume
+          </a>
+          <a href="https://linkedin.com/in/dhanush-chandra-shekar" target="_blank" rel="noopener noreferrer" className="social-pill">
+            LinkedIn
+          </a>
+          <a href="https://github.com/dhanush1-2" target="_blank" rel="noopener noreferrer" className="social-pill">
+            GitHub
+          </a>
+          <a href="mailto:dhanush12232002@gmail.com" className="social-pill">
+            Email
+          </a>
+        </div>
+
+      </div>
+
+    </div>
   )
 }
