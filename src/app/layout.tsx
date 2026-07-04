@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { JetBrains_Mono, Inter, Space_Grotesk } from 'next/font/google'
 import CustomCursor from '@/components/CustomCursor'
 import FullPagePhysicsBall from '@/components/FullPagePhysicsBall'
+import SmoothScroll from '@/components/SmoothScroll'
 import './globals.css'
 
 const jetbrainsMono = JetBrains_Mono({
@@ -43,6 +44,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${jetbrainsMono.variable} ${inter.variable} ${spaceGrotesk.variable}`}
     >
       <body>
+        <SmoothScroll />
         <CustomCursor />
         <FullPagePhysicsBall />
         {children}

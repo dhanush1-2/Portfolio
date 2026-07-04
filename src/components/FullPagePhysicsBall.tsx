@@ -37,6 +37,7 @@ export default function FullPagePhysicsBall() {
     let lastMouseY = 0
     let clientX = 0
     let clientY = 0
+    let lastScrollY = window.scrollY
 
     const getDistance = (mx: number, my: number) => {
       const dx = mx - x
@@ -87,10 +88,20 @@ export default function FullPagePhysicsBall() {
       }
     }
 
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY
+      const deltaY = currentScrollY - lastScrollY
+      if (!isDragging) {
+        y -= deltaY
+      }
+      lastScrollY = currentScrollY
+    }
+
     // Attach listeners
     window.addEventListener('mousemove', handleGlobalMouseMove)
     canvas.addEventListener('mousedown', onMouseDown)
     window.addEventListener('mouseup', onMouseUp)
+    window.addEventListener('scroll', handleScroll, { passive: true })
 
     let animationId: number
 
@@ -162,6 +173,7 @@ export default function FullPagePhysicsBall() {
       window.removeEventListener('mousemove', handleGlobalMouseMove)
       canvas.removeEventListener('mousedown', onMouseDown)
       window.removeEventListener('mouseup', onMouseUp)
+      window.removeEventListener('scroll', handleScroll)
       cancelAnimationFrame(animationId)
     }
   }, [])
