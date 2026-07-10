@@ -111,8 +111,8 @@ export default function Hero() {
       </div>
 
       <p style={{ fontSize: '1.15rem', lineHeight: 1.75, color: 'var(--color-text-muted)', maxWidth: '700px' }}>
-        MS Data Science student at Indiana University graduating 2026. 
-        I build end to end intelligent systems ranging from training models in PyTorch to deploying production MLOps architectures.
+        MS Data Science at Indiana University, graduating 2026.
+        I build end-to-end intelligent systems — from training Transformer models in PyTorch to shipping production MLOps pipelines and multi-agent LLM architectures.
       </p>
 
       {/* Interactive Keyboard & Console Stack */}

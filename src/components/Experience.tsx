@@ -9,7 +9,7 @@ const ENTRIES = [
     org: 'Indiana University · Kelley School of Business',
     location: 'Bloomington, IN',
     description:
-      'Instruct graduate students through data cleaning, statistics, and regression analysis. Architect scalable academic computing labs and design assessment workflows translating ML theory into reproducible engineering practices.',
+      'Graduate students struggled to bridge statistical theory and production-grade code. Redesigned lab workflows around real datasets, authored reproducible Python exercises for 30+ students, and built rubrics that graded engineering practice alongside math.',
     tags: ['Teaching', 'Data Science', 'Python', 'Statistics'],
   },
   {
@@ -18,7 +18,7 @@ const ENTRIES = [
     org: 'Indiana University Bloomington',
     location: 'Bloomington, IN',
     description:
-      'Focused on Machine Learning, NLP, and scalable Data Engineering. Research in graph databases, vector search, distributed pipelines, and MLOps, translating academic research into production ready applications.',
+      'Coursework alone doesn\'t produce production-ready engineers. Pushed every project toward real deployments — building graph databases, vector search pipelines, and MLOps systems that went beyond academic exercises into working open-source software.',
     tags: ['ML', 'NLP', 'Neo4j', 'MLOps', 'PyTorch'],
   },
 ]

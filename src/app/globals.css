@@ -608,3 +608,14 @@ section {
   0%, 100% { opacity: 1; }
   50%       { opacity: 0; }
 }
+
+/* ============================================================
+   PAR CASE STUDY LABELS
+   ============================================================ */
+.par-label {
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding-top: 2px;
+  flex-shrink: 0;
+}
