@@ -6,7 +6,6 @@ import Hero from '@/components/Hero'
 import Projects from '@/components/Projects'
 import Skills from '@/components/Skills'
 import Experience from '@/components/Experience'
-import Contact from '@/components/Contact'
 import Footer from '@/components/Footer'
 
 type TabItem = {
@@ -40,6 +39,10 @@ export default function Home() {
             currentActive = i
           }
         }
+      }
+      // The footer is shorter than the viewport, so it never reaches the header line; treat the page bottom as Contact
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) {
+        currentActive = TABS.length - 1
       }
       setActiveTab(currentActive)
     }
@@ -75,12 +78,12 @@ export default function Home() {
         <section id="experience">
           <Experience />
         </section>
-        <section id="contact">
-          <Contact />
-        </section>
       </main>
 
-      <Footer />
+      {/* The footer doubles as the contact section */}
+      <section id="contact">
+        <Footer />
+      </section>
     </div>
   )
 }
