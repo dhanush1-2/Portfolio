@@ -12,7 +12,7 @@ const ROLES = ['AI / ML Engineer', 'LLM Systems Builder', 'Data Scientist', 'MLO
 const LINKS = [
   { label: 'GitHub', href: 'https://github.com/dhanush1-2' },
   { label: 'LinkedIn', href: 'https://linkedin.com/in/dhanush-chandra-shekar' },
-  { label: 'Email', href: 'mailto:dhanush12232002@gmail.com' },
+  { label: 'Email', href: 'mailto:dcshekar8@gmail.com' },
 ]
 
 const STATS = [
@@ -135,7 +135,7 @@ export default function Hero() {
 
           <motion.div {...fadeUp(1)} className="flex flex-wrap items-center gap-3">
             <a
-              href="https://drive.google.com/file/d/1McFAVDDGbraRk7BkDolprtWaDEtDYxV6/view?usp=drive_link"
+              href="https://drive.google.com/file/d/1XgYZIyry2xn8eFdSpX1H0AGen-IWaZ-q/view?usp=sharing"
               target="_blank"
               rel="noopener noreferrer"
               className="rounded-lg bg-neutral-100 px-5 py-2.5 text-xs font-medium uppercase tracking-[0.2em] text-black transition-colors hover:bg-white"

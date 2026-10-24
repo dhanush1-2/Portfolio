@@ -7,6 +7,7 @@ import Projects from '@/components/Projects'
 import Skills from '@/components/Skills'
 import Experience from '@/components/Experience'
 import Contact from '@/components/Contact'
+import Footer from '@/components/Footer'
 
 type TabItem = {
   label: string
@@ -79,12 +80,7 @@ export default function Home() {
         </section>
       </main>
 
-      <footer className="py-10">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-6 font-mono text-[0.65rem] uppercase tracking-[0.2em] text-neutral-600 sm:flex-row">
-          <span>© {new Date().getFullYear()} Dhanush Chandra Shekar</span>
-          <span>Bloomington, IN · 39.1653° N, 86.5264° W</span>
-        </div>
-      </footer>
+      <Footer />
     </div>
   )
 }

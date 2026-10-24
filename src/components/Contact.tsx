@@ -7,7 +7,7 @@ import GatewayFlow from '@/components/ui/gateway-flow'
 import SectionHeader from '@/components/SectionHeader'
 
 const CHANNELS = [
-  { label: 'Direct channel', value: 'dhanush12232002@gmail.com', href: 'mailto:dhanush12232002@gmail.com' },
+  { label: 'Direct channel', value: 'dcshekar8@gmail.com', href: 'mailto:dcshekar8@gmail.com' },
   { label: 'LinkedIn', value: 'in/dhanush-chandra-shekar', href: 'https://linkedin.com/in/dhanush-chandra-shekar' },
   { label: 'GitHub', value: 'dhanush1-2', href: 'https://github.com/dhanush1-2' },
 ]
@@ -44,7 +44,7 @@ export default function Contact() {
     // Construct pre-filled mailto redirect link
     const subject = encodeURIComponent(`Portfolio Inquiry from ${name}`)
     const body = encodeURIComponent(`Hello Dhanush,\n\n${message}\n\nBest regards,\n${name}\nEmail: ${email}`)
-    window.location.href = `mailto:dhanush12232002@gmail.com?subject=${subject}&body=${body}`
+    window.location.href = `mailto:dcshekar8@gmail.com?subject=${subject}&body=${body}`
 
     setSent(true)
     setTimeout(() => {
@@ -60,7 +60,7 @@ export default function Contact() {
       <SectionHeader
         index="04"
         label="get in touch"
-        title="Open a Connection"
+        title="Let's Connect"
         description="Available for full time roles, research collaborations, and intelligent systems consulting. Let's build together."
       />
 
@@ -146,7 +146,7 @@ export default function Contact() {
                 >
                   <span className="pointer-events-none absolute inset-0 rounded-lg border border-white/10 transition-colors duration-300 group-hover/btn:border-transparent" />
                   <span className="glow-border" />
-                  <span className="relative z-20">{sent ? 'Uplink established ✓' : 'Initialize uplink ↗'}</span>
+                  <span className="relative z-20">{sent ? 'Opening your mail app ✓' : 'Send message ↗'}</span>
                 </button>
               </form>
             </div>

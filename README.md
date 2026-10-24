@@ -9,7 +9,7 @@
   <a href="https://dhanushc.live" target="_blank">
     <img src="https://img.shields.io/badge/Portfolio-000000?style=for-the-badge&logo=vercel&logoColor=white" />
   </a>
-  <a href="mailto:dhanush12232002@gmail.com">
+  <a href="mailto:dcshekar8@gmail.com">
     <img src="https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white" />
   </a>
   <a href="https://linkedin.com/in/dhanush-chandra-shekar" target="_blank">
@@ -29,7 +29,7 @@ I'm an AI/ML Engineer and MS Data Science student at **Indiana University** (gra
 - 🔭 Currently building intelligent systems that bridge AI research and real-world product use cases
 - 🌱 Actively exploring **LLM agents**, **knowledge graphs**, and **MLOps at scale**
 - 💡 Passionate about making AI systems explainable, reliable, and production-ready
-- 📫 Reach me at **dhanush12232002@gmail.com**
+- 📫 Reach me at **dcshekar8@gmail.com**
 
 ---
 
