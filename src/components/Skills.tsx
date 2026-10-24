@@ -1,93 +1,85 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import GlowCard from '@/components/GlowCard'
+import SectionHeader from '@/components/SectionHeader'
+import { cn } from '@/lib/utils'
 
 const SKILL_GROUPS = [
   {
+    category: 'AI / ML',
+    blurb: 'Training, fine tuning, and retrieval systems',
+    items: ['PyTorch', 'LangGraph', 'HuggingFace', 'Transformers', 'RAG', 'XGBoost', 'LightGBM', 'scikit learn'],
+    wide: true,
+  },
+  {
     category: 'Languages',
+    blurb: 'Daily drivers',
     items: ['Python', 'TypeScript', 'SQL', 'C'],
   },
   {
-    category: 'AI / ML',
-    items: ['PyTorch', 'LangGraph', 'HuggingFace', 'Transformers', 'RAG', 'XGBoost', 'LightGBM', 'scikit learn'],
-  },
-  {
     category: 'Data & Databases',
+    blurb: 'Graph, vector, and relational stores',
     items: ['Neo4j', 'ChromaDB', 'FAISS', 'PostgreSQL', 'Redis', 'SQLAlchemy'],
   },
   {
     category: 'Frameworks',
+    blurb: 'APIs and product surfaces',
     items: ['FastAPI', 'Next.js', 'React', 'Node.js', 'LangChain'],
   },
   {
     category: 'DevOps & Tools',
+    blurb: 'Shipping, monitoring, reporting',
     items: ['Docker', 'GitHub Actions', 'Prometheus', 'Supabase', 'Power BI', 'Tableau'],
   },
 ]
 
 export default function Skills() {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '48px' }}>
-      
-      {/* Header */}
-      <div>
-        <span className="nav-text" style={{ fontSize: '0.72rem', color: 'var(--color-text-muted)', display: 'block', marginBottom: '8px' }}>
-          tech stack
-        </span>
-        <h2 style={{ fontSize: '2.4rem', fontWeight: 'bold' }}>Skills</h2>
-      </div>
+    <div>
+      <SectionHeader
+        index="02"
+        label="tech stack"
+        title="Skills & Tools"
+        description="The toolkit behind the systems above, grouped by where it sits in the stack."
+      />
 
-      {/* Skill groups — each category on its own row */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {SKILL_GROUPS.map((group, gIdx) => (
           <motion.div
             key={group.category}
-            className="skills-row-container"
-            initial={{ opacity: 0, y: 20 }}
+            className={cn(group.wide && 'md:col-span-2')}
+            initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-40px' }}
-            transition={{ duration: 0.4, delay: gIdx * 0.06, ease: 'easeOut' }}
+            transition={{ duration: 0.6, delay: gIdx * 0.06, ease: [0.16, 1, 0.3, 1] }}
           >
-            {/* Category label — fixed width */}
-            <span className="skills-category-label">
-              {group.category}
-            </span>
-
-            {/* Skill pills */}
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
-              {group.items.map((item) => (
-                <span
-                  key={item}
-                  style={{
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: '0.88rem',
-                    border: '1.5px solid var(--color-border)',
-                    padding: '6px 16px',
-                    borderRadius: '100px',
-                    background: 'var(--color-parchment-cream)',
-                    color: 'var(--color-text-primary)',
-                    transition: 'all 0.2s ease',
-                    cursor: 'default',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = 'var(--color-ink-dark)'
-                    e.currentTarget.style.color = 'var(--color-bg)'
-                    e.currentTarget.style.transform = 'translateY(-2px)'
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = 'var(--color-parchment-cream)'
-                    e.currentTarget.style.color = 'var(--color-text-primary)'
-                    e.currentTarget.style.transform = 'translateY(0)'
-                  }}
-                >
-                  {item}
-                </span>
-              ))}
-            </div>
+            <GlowCard className="h-full">
+              <div className="relative z-20 flex h-full flex-col gap-5 p-6 md:p-7">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <h3 className="font-heading text-lg font-light uppercase tracking-wide text-white">{group.category}</h3>
+                    <p className="mt-1 text-xs font-extralight text-neutral-500">{group.blurb}</p>
+                  </div>
+                  <span className="font-mono text-[0.6rem] tracking-[0.2em] text-neutral-600">
+                    {String(gIdx + 1).padStart(2, '0')}
+                  </span>
+                </div>
+                <div className="mt-auto flex flex-wrap gap-2">
+                  {group.items.map((item) => (
+                    <span
+                      key={item}
+                      className="rounded-md border border-white/[0.07] bg-white/[0.02] px-2.5 py-1 text-[0.8rem] font-light text-neutral-300 transition-colors hover:border-white/25 hover:text-white"
+                    >
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </GlowCard>
           </motion.div>
         ))}
       </div>
-
     </div>
   )
 }

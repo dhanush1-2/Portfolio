@@ -1,6 +1,8 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import GlowCard from '@/components/GlowCard'
+import SectionHeader from '@/components/SectionHeader'
 
 const ENTRIES = [
   {
@@ -25,95 +27,60 @@ const ENTRIES = [
 
 export default function Experience() {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
-      
-      {/* Header */}
-      <div>
-        <span className="nav-text" style={{ fontSize: '0.72rem', color: 'var(--color-text-muted)', display: 'block', marginBottom: '8px' }}>
-          background
-        </span>
-        <h2 style={{ fontSize: '2.4rem', fontWeight: 'bold' }}>Experience</h2>
-      </div>
+    <div>
+      <SectionHeader index="03" label="background" title="Experience" />
 
-      {/* Horizontal Scrollable Timeline */}
-      <div className="horizontal-timeline-container">
-        
-        {/* Horizontal Axis Axis Line */}
-        <div className="horizontal-timeline-axis" />
+      <ol className="relative flex flex-col gap-6 pl-8 md:pl-12">
+        {/* Dotted rail, same dash rhythm as the flow paths */}
+        <span
+          aria-hidden="true"
+          className="absolute bottom-4 left-[7px] top-4 w-px md:left-[15px]"
+          style={{ backgroundImage: 'linear-gradient(to bottom, rgba(255,255,255,0.35) 1px, transparent 1px)', backgroundSize: '1px 5px' }}
+        />
 
-        {/* Track holding the items */}
-        <div className="horizontal-timeline-track">
-          {ENTRIES.map((entry, idx) => (
-            <div key={idx} className="horizontal-timeline-item">
-              
-              {/* Central axis dot */}
-              <div className="horizontal-timeline-dot" />
+        {ENTRIES.map((entry, idx) => (
+          <motion.li
+            key={entry.role}
+            className="relative"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-40px' }}
+            transition={{ duration: 0.7, delay: idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
+          >
+            {/* Node on the rail */}
+            <span
+              aria-hidden="true"
+              className="absolute -left-8 top-8 flex h-[15px] w-[15px] items-center justify-center rounded-full border border-white/20 bg-black md:-left-12 md:ml-2"
+            >
+              <span className="h-[5px] w-[5px] rounded-full bg-neutral-200 shadow-[0_0_10px_rgba(255,255,255,0.8)]" />
+            </span>
 
-              {/* Vertical connector to card */}
-              <div className="horizontal-timeline-connector" />
-
-              {/* Slide item card */}
-              <motion.div
-                className="horizontal-timeline-card"
-                initial={{ opacity: 0, x: 50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, margin: '-20px' }}
-                transition={{ duration: 0.5, delay: idx * 0.1, ease: 'easeOut' }}
-              >
-                {/* Period & Location metadata */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '16px', flexWrap: 'wrap', gap: '8px' }}>
-                  <span className="mono-text" style={{ fontSize: '0.88rem', fontWeight: 'bold', color: 'var(--color-text-primary)' }}>
-                    {entry.period}
-                  </span>
-                  <span className="nav-text" style={{ fontSize: '0.68rem', color: 'var(--color-text-muted)', letterSpacing: '0.06em' }}>
-                    {entry.location}
-                  </span>
+            <GlowCard>
+              <div className="relative z-20 grid gap-6 p-6 md:grid-cols-[200px_1fr] md:p-8">
+                <div className="flex flex-col gap-1 font-mono text-[0.65rem] uppercase tracking-[0.2em]">
+                  <span className="text-neutral-200">{entry.period}</span>
+                  <span className="text-neutral-600">{entry.location}</span>
                 </div>
 
-                {/* Role Details */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                <div className="flex flex-col gap-4">
                   <div>
-                    <h3 style={{ fontSize: '1.35rem', fontWeight: 'bold', color: 'var(--color-text-primary)', marginBottom: '4px', lineHeight: '1.2' }}>
-                      {entry.role}
-                    </h3>
-                    <span className="mono-text" style={{ fontSize: '0.92rem', color: 'var(--color-text-muted)' }}>
-                      {entry.org}
-                    </span>
+                    <h3 className="font-heading text-xl font-normal text-white md:text-2xl">{entry.role}</h3>
+                    <p className="mt-1 text-sm font-light text-neutral-500">{entry.org}</p>
                   </div>
-
-                  <p style={{ fontSize: '0.95rem', lineHeight: 1.6, color: 'var(--color-text-muted)' }}>
-                    {entry.description}
-                  </p>
-
-                  {/* Tags list */}
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '6px' }}>
+                  <p className="max-w-3xl text-sm font-extralight leading-relaxed text-neutral-400">{entry.description}</p>
+                  <div className="flex flex-wrap gap-1.5">
                     {entry.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="mono-text"
-                        style={{
-                          fontSize: '0.72rem',
-                          border: '1px solid var(--color-border)',
-                          padding: '3px 12px',
-                          borderRadius: '100px',
-                          textTransform: 'uppercase',
-                          letterSpacing: '0.04em',
-                          background: 'var(--color-bg)',
-                        }}
-                      >
+                      <span key={tag} className="rounded-md border border-white/[0.07] bg-white/[0.02] px-2 py-0.5 font-mono text-[0.6rem] uppercase tracking-[0.1em] text-neutral-500">
                         {tag}
                       </span>
                     ))}
                   </div>
                 </div>
-
-              </motion.div>
-            </div>
-          ))}
-        </div>
-
-      </div>
-
+              </div>
+            </GlowCard>
+          </motion.li>
+        ))}
+      </ol>
     </div>
   )
 }

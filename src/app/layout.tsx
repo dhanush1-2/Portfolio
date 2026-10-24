@@ -1,25 +1,24 @@
 import type { Metadata } from 'next'
 import { JetBrains_Mono, Inter, Space_Grotesk } from 'next/font/google'
-import CustomCursor from '@/components/CustomCursor'
-import FullPagePhysicsBall from '@/components/FullPagePhysicsBall'
 import SmoothScroll from '@/components/SmoothScroll'
 import './globals.css'
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
-  variable: '--font-mono',
+  variable: '--font-mono-stack',
   display: 'swap',
 })
 
 const inter = Inter({
   subsets: ['latin'],
+  weight: ['200', '300', '400', '500', '600'],
   variable: '--font-body',
   display: 'swap',
 })
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
-  variable: '--font-heading',
+  variable: '--font-display',
   display: 'swap',
 })
 
@@ -45,8 +44,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       <body>
         <SmoothScroll />
-        <CustomCursor />
-        <FullPagePhysicsBall />
+        {/* Page-wide dither texture, matching the gateway flow overlay */}
+        <div aria-hidden="true" className="dither pointer-events-none fixed inset-0 z-[60] opacity-[0.035]" />
         {children}
       </body>
     </html>

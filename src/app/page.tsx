@@ -28,8 +28,8 @@ export default function Home() {
   useEffect(() => {
     const handleScroll = () => {
       // Check which section is currently active by measuring offset top values
-      const scrollPosition = window.scrollY + 140 // offset matching header margin
-      
+      const scrollPosition = window.scrollY + 140 // offset matching header height
+
       let currentActive = 0
       for (let i = 0; i < TABS.length; i++) {
         const el = document.getElementById(TABS[i].id)
@@ -45,23 +45,26 @@ export default function Home() {
 
     window.addEventListener('scroll', handleScroll, { passive: true })
     handleScroll() // set initial highlight
-    
+
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
   return (
-    <div className="portfolio-container">
-      {/* Sticky Top Header Navbar */}
-      <Header
-        tabs={TABS}
-        activeTab={activeTab}
+    <div className="relative min-h-screen">
+      <Header tabs={TABS} activeTab={activeTab} />
+
+      {/* Faint radial glow behind the content */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,0.05),transparent_60%)]"
       />
 
-      {/* Main content sections stacked vertically */}
-      <main className="content-area">
-        <section id="about">
-          <Hero />
-        </section>
+      {/* Full-bleed hero, outside the centred content column */}
+      <section id="about">
+        <Hero />
+      </section>
+
+      <main className="mx-auto flex max-w-7xl flex-col gap-28 px-4 pb-24 pt-12 sm:px-6 md:gap-36">
         <section id="projects">
           <Projects />
         </section>
@@ -76,10 +79,12 @@ export default function Home() {
         </section>
       </main>
 
-      {/* Keyboard Shortcuts HUD indicator */}
-      <div className="control-prompts">
-        <span className="mono-text">hover</span> keyboard to explore
-      </div>
+      <footer className="py-10">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-6 font-mono text-[0.65rem] uppercase tracking-[0.2em] text-neutral-600 sm:flex-row">
+          <span>© {new Date().getFullYear()} Dhanush Chandra Shekar</span>
+          <span>Bloomington, IN · 39.1653° N, 86.5264° W</span>
+        </div>
+      </footer>
     </div>
   )
 }

@@ -1,194 +1,173 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { motion } from 'framer-motion'
+import { SplineScene } from '@/components/ui/splite'
+import { Spotlight } from '@/components/ui/spotlight'
+import GatewayFlow from '@/components/ui/gateway-flow'
+import { cn } from '@/lib/utils'
 
-const DYNAMIC_TAGS: Record<string, string> = {
-  Q: 'Query optimization through indexing and profiling SQL database structures',
-  W: 'Workflow automation for deploying CI/CD runs via GitHub Actions',
-  E: 'End to end MLOps including pipeline stages and model drift monitoring',
-  R: 'Retrieval Augmented Generation for semantic search over documents',
-  T: 'Transformer architectures for training custom encoder decoder models',
-  Y: 'Yield performance tracking and data health metrics telemetry',
-  U: 'Unified API gateways for orchestrating multi provider LLM calls',
-  I: 'Intelligent agents and LangGraph multi agent state orchestration',
-  O: 'Output controls enforcing structured JSON response schemas',
-  P: 'PyTorch CUDA configurations and parallel tensor operations',
-  A: 'AI ML systems builder designing end to end infrastructures',
-  S: 'Star schema design for dimensional modeling in analytics pipelines',
-  D: 'Deep learning for training custom neural networks from scratch',
-  F: 'Fine tuning LLMs utilizing targeted instruction validation',
-  G: 'Graph modeling traversing Neo4j knowledge graph databases',
-  H: 'Hyperparameter sweeps boosting convergence and model accuracy',
-  J: 'Jupyter research for exploratory data analysis and prototyping',
-  K: 'Knowledge graphs using GraphRAG for context aware retrieval',
-  L: 'Latency tuning for reducing API response cycles and caching',
-  Z: 'Zero shot learning for generalized classification without labels',
-  X: 'XGBoost ensembles for gradient boosted prediction models',
-  C: 'Clean architecture for modular testable production ready code',
-  V: 'Vector databases for ChromaDB and FAISS semantic indexing',
-  B: 'Bayesian modeling for probabilistic inference and uncertainty',
-  N: 'Neural network optimization such as pruning and quantization',
-  M: 'Machine translation sequence to sequence NLP pipelines',
-}
+const ROLES = ['AI / ML Engineer', 'LLM Systems Builder', 'Data Scientist', 'MLOps Engineer']
 
-const KEYBOARD_ROWS = [
-  ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
-  ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
-  ['Z', 'X', 'C', 'V', 'B', 'N', 'M']
+const LINKS = [
+  { label: 'GitHub', href: 'https://github.com/dhanush1-2' },
+  { label: 'LinkedIn', href: 'https://linkedin.com/in/dhanush-chandra-shekar' },
+  { label: 'Email', href: 'mailto:dhanush12232002@gmail.com' },
 ]
 
-export default function Hero() {
-  const [nameText, setNameText] = useState('')
-  const [subtitleText, setSubtitleText] = useState('')
-  const [activeKey, setActiveKey] = useState<string>('D')
-  const [displayedTagline, setDisplayedTagline] = useState<string>('')
+const STATS = [
+  { value: '9', label: 'open source systems' },
+  { value: '12', label: 'agent LangGraph engine' },
+  { value: '98%', label: 'p95 latency cut' },
+]
 
-  // Initial typewriter load effect for Name & Title
+function useTypedRoles(words: string[]) {
+  const [text, setText] = useState('')
+  const [wordIdx, setWordIdx] = useState(0)
+  const [deleting, setDeleting] = useState(false)
+
   useEffect(() => {
-    let tName: NodeJS.Timeout
-    let tSub: NodeJS.Timeout
-    const name = 'Dhanush Chandra Shekar'
-    const sub = 'AI ML Engineer and Systems Builder'
+    const word = words[wordIdx]
+    let delay = deleting ? 35 : 70
+    if (!deleting && text === word) delay = 1800
 
-    let idx1 = 0
-    const typeName = () => {
-      if (idx1 <= name.length) {
-        setNameText(name.slice(0, idx1))
-        idx1++
-        tName = setTimeout(typeName, 80)
+    const timer = setTimeout(() => {
+      if (!deleting && text === word) {
+        setDeleting(true)
+      } else if (deleting && text === '') {
+        setDeleting(false)
+        setWordIdx((wordIdx + 1) % words.length)
       } else {
-        let idx2 = 0
-        const typeSub = () => {
-          if (idx2 <= sub.length) {
-            setSubtitleText(sub.slice(0, idx2))
-            idx2++
-            tSub = setTimeout(typeSub, 55)
-          }
-        }
-        typeSub()
+        setText(word.slice(0, text.length + (deleting ? -1 : 1)))
       }
-    }
-    typeName()
-
-    return () => {
-      clearTimeout(tName)
-      clearTimeout(tSub)
-    }
-  }, [])
-
-  // Typewriter effect on hovering letter keys
-  const tagLine = DYNAMIC_TAGS[activeKey] || ''
-
-  useEffect(() => {
-    let timer: NodeJS.Timeout
-    setDisplayedTagline('')
-    let idx = 0
-    const typeTagline = () => {
-      if (idx <= tagLine.length) {
-        setDisplayedTagline(tagLine.slice(0, idx))
-        idx++
-        timer = setTimeout(typeTagline, 35)
-      }
-    }
-    typeTagline()
+    }, delay)
     return () => clearTimeout(timer)
-  }, [activeKey, tagLine])
+  }, [text, deleting, wordIdx, words])
+
+  return text
+}
+
+const fadeUp = (delay: number) => ({
+  initial: { opacity: 0, y: 24 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.9, delay, ease: [0.16, 1, 0.3, 1] as const },
+})
+
+export default function Hero() {
+  const role = useTypedRoles(ROLES)
+  const robotRef = useRef<HTMLDivElement>(null)
+  const [robotReady, setRobotReady] = useState(false)
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '36px', textAlign: 'center', alignItems: 'center' }}>
-      
-      {/* Centered Intro Title */}
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <h2 style={{ fontSize: '4.2rem', fontWeight: 900, lineHeight: 1.08, letterSpacing: '-0.03em', color: 'var(--color-text-primary)', minHeight: '4.5rem' }}>
-          {nameText}
-          {nameText.length < 22 && (
-            <span style={{ display: 'inline-block', width: '3px', height: '0.85em', background: 'var(--color-border)', marginLeft: '4px', verticalAlign: 'middle', animation: 'blink-cursor 0.8s step-end infinite' }} />
-          )}
-        </h2>
-        <h3 className="mono-text" style={{ fontSize: '1.5rem', color: 'var(--color-text-muted)', marginTop: '12px', minHeight: '1.8rem' }}>
-          {subtitleText}
-        </h3>
+    <div className="relative isolate flex w-full flex-col overflow-hidden md:h-svh md:min-h-[640px]">
+      {/* LLM connections converging on the robot, edge to edge */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+        <GatewayFlow mode="dark" density={0.8} opacity={0.6} focusRef={robotRef} />
       </div>
 
-      <p style={{ fontSize: '1.15rem', lineHeight: 1.75, color: 'var(--color-text-muted)', maxWidth: '700px' }}>
-        MS Data Science at Indiana University, graduating 2026.
-        I build end-to-end intelligent systems — from training Transformer models in PyTorch to shipping production MLOps pipelines and multi-agent LLM architectures.
-      </p>
+      {/* Readability fades: behind the text column, under the header, and into the next section */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black via-black/70 to-transparent md:bg-gradient-to-r md:from-black md:via-black/70 md:via-30% md:to-transparent md:to-55%" />
+      <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black to-transparent" />
+      <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black to-transparent" />
 
-      {/* Interactive Keyboard & Console Stack */}
-      <div className="hero-wrapper" style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
-        
-        {/* Tagline display console (positioned ABOVE the keyboard) */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%', alignItems: 'center' }}>
-          <span className="nav-text" style={{ fontSize: '0.6rem', color: 'var(--color-text-muted)', letterSpacing: '0.15em' }}>
-            [ active parameter ]
-          </span>
-          <div className="tagline-console" style={{ minHeight: '80px', padding: '16px 24px', borderRadius: '12px', width: '100%', maxWidth: '780px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <span className="mono-text" style={{ fontSize: '1.25rem', color: 'var(--color-text-primary)', fontWeight: 'bold' }}>
-              {displayedTagline}
-              <span
-                aria-hidden="true"
-                style={{
-                  display: 'inline-block',
-                  width: '2.5px',
-                  height: '1.1em',
-                  background: 'var(--color-border)',
-                  marginLeft: '6px',
-                  verticalAlign: 'middle',
-                  animation: 'blink-cursor 0.8s step-end infinite',
-                }}
-              />
-            </span>
+      <Spotlight size={520} className="from-white/[0.06] via-white/[0.03] to-transparent" />
+
+      <div className="relative mx-auto flex w-full max-w-7xl flex-1 flex-col px-4 pt-32 sm:px-6 md:pt-20">
+        {/* Robot: a wide canvas so the raised arms never hit the edge; its left edge fades under the text */}
+        <div
+          ref={robotRef}
+          className="relative order-last -mx-4 h-[420px] sm:-mx-6 md:absolute md:inset-y-0 md:right-0 md:order-none md:mx-0 md:h-auto md:w-[68%] lg:w-[60%] md:[mask-image:linear-gradient(to_right,transparent,black_22%)]"
+        >
+          <div className={cn('h-full w-full transition-opacity duration-1000', robotReady ? 'opacity-100' : 'opacity-0')}>
+            <SplineScene
+              scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
+              className="h-full w-full"
+              onLoad={() => setRobotReady(true)}
+            />
           </div>
+          {!robotReady && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="loader" />
+            </div>
+          )}
         </div>
 
-        {/* Keyboard layout */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%', alignItems: 'center' }}>
-          <span className="nav-text" style={{ fontSize: '0.6rem', color: 'var(--color-text-muted)', letterSpacing: '0.15em' }}>
-            hover to explore
-          </span>
-          
-          <div className="keyboard-container">
-            {KEYBOARD_ROWS.map((row, rIdx) => (
-              <div key={rIdx} className="keyboard-row" style={{ paddingLeft: rIdx === 1 ? 'var(--keyboard-stagger)' : rIdx === 2 ? 'calc(var(--keyboard-stagger) * 2)' : '0px' }}>
-                {row.map((key) => (
-                  <div
-                    key={key}
-                    className={`keycap${activeKey === key ? ' pressed' : ''}`}
-                    onMouseEnter={() => setActiveKey(key)}
-                    onClick={() => setActiveKey(key)}
+        {/* Left content */}
+        <div className="relative z-10 flex flex-1 flex-col justify-center gap-7 pb-6 md:w-[52%] md:py-10 lg:w-[48%]">
+          <motion.span
+            {...fadeUp(0.1)}
+            className="inline-flex w-fit items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 font-mono text-[0.65rem] uppercase tracking-[0.2em] text-neutral-400"
+          >
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
+            </span>
+            Open to full time roles · 2026
+          </motion.span>
+
+          <div className="flex flex-col gap-4">
+            <h1 className="font-heading text-[2.6rem] font-light uppercase leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
+              {['Dhanush', 'Chandra', 'Shekar'].map((word, i) => (
+                <span key={word} className="block overflow-hidden pb-1">
+                  <motion.span
+                    className="inline-block bg-gradient-to-b from-neutral-50 to-neutral-400 bg-clip-text text-transparent"
+                    initial={{ y: '120%' }}
+                    animate={{ y: '0%' }}
+                    transition={{ duration: 1.2, delay: 0.2 + i * 0.15, ease: [0.16, 1, 0.3, 1] }}
                   >
-                    {key}
-                  </div>
-                ))}
+                    {word}
+                  </motion.span>
+                </span>
+              ))}
+            </h1>
+
+            <motion.p {...fadeUp(0.7)} className="h-6 font-mono text-sm uppercase tracking-[0.18em] text-neutral-300 md:text-base">
+              <span className="text-neutral-600">&gt; </span>
+              {role}
+              <span className="blink ml-1 inline-block h-4 w-[2px] translate-y-[2px] bg-neutral-300" />
+            </motion.p>
+          </div>
+
+          <motion.p {...fadeUp(0.85)} className="max-w-md text-[0.95rem] font-extralight leading-relaxed text-neutral-400">
+            MS Data Science at Indiana University. I build end to end intelligent systems, from Transformers trained
+            from scratch in PyTorch to production MLOps pipelines and multi agent LLM architectures.
+          </motion.p>
+
+          <motion.div {...fadeUp(1)} className="flex flex-wrap items-center gap-3">
+            <a
+              href="https://drive.google.com/file/d/1McFAVDDGbraRk7BkDolprtWaDEtDYxV6/view?usp=drive_link"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-lg bg-neutral-100 px-5 py-2.5 text-xs font-medium uppercase tracking-[0.2em] text-black transition-colors hover:bg-white"
+            >
+              Resume ↗
+            </a>
+            {LINKS.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                target={link.href.startsWith('http') ? '_blank' : undefined}
+                rel="noopener noreferrer"
+                className="group relative rounded-lg bg-black/60 px-4 py-2.5 text-xs font-light uppercase tracking-[0.2em] text-neutral-400 transition-colors hover:text-white"
+              >
+                <span className="pointer-events-none absolute inset-0 rounded-lg border border-white/10 transition-colors duration-300 group-hover:border-transparent" />
+                <span className="glow-border" />
+                <span className="relative">{link.label}</span>
+              </a>
+            ))}
+          </motion.div>
+
+          <motion.dl {...fadeUp(1.15)} className="mt-2 grid max-w-md grid-cols-3 gap-4 border-t border-white/[0.06] pt-6">
+            {STATS.map((stat) => (
+              <div key={stat.label} className="flex flex-col gap-1">
+                <dt className="font-heading text-2xl font-light text-white">{stat.value}</dt>
+                <dd className="text-[0.65rem] uppercase leading-snug tracking-[0.15em] text-neutral-600">{stat.label}</dd>
               </div>
             ))}
-          </div>
-        </div>
-
-        {/* Social outline pills (placed below the keyboard) */}
-        <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap', marginTop: '8px' }}>
-          <a
-            href="https://drive.google.com/file/d/1McFAVDDGbraRk7BkDolprtWaDEtDYxV6/view?usp=drive_link"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="social-pill"
-          >
-            Resume
-          </a>
-          <a href="https://linkedin.com/in/dhanush-chandra-shekar" target="_blank" rel="noopener noreferrer" className="social-pill">
-            LinkedIn
-          </a>
-          <a href="https://github.com/dhanush1-2" target="_blank" rel="noopener noreferrer" className="social-pill">
-            GitHub
-          </a>
-          <a href="mailto:dhanush12232002@gmail.com" className="social-pill">
-            Email
-          </a>
+          </motion.dl>
         </div>
 
       </div>
-
     </div>
   )
 }

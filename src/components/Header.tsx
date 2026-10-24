@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback } from 'react'
+import { cn } from '@/lib/utils'
 
 interface TabItem {
   label: string
@@ -22,45 +23,40 @@ export default function Header({ tabs, activeTab }: HeaderProps) {
   }, [])
 
   return (
-    <header className="header-nav">
-      {/* Brand logo details */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-        <a href="#about" onClick={(e) => handleNav(e, 'about')} style={{ display: 'block' }}>
-          <h1 className="mono-text" style={{ fontSize: '1.1rem', fontWeight: 'bold', letterSpacing: '0.02em', textTransform: 'uppercase' }}>
-            <span className="desktop-brand">Dhanush Chandra Shekar</span>
-            <span className="mobile-brand">Dhanush C.</span>
-          </h1>
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-white/[0.05] bg-black/70 backdrop-blur-xl">
+      <div className="mx-auto flex max-w-7xl flex-col items-center gap-3 px-4 py-3 sm:flex-row sm:justify-between sm:px-6 sm:py-4">
+        <a href="#about" onClick={(e) => handleNav(e, 'about')} className="flex items-center gap-3">
+          <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/[0.03] font-mono text-[0.7rem] text-neutral-200">
+            DC
+          </span>
+          <span className="font-heading text-sm font-light uppercase tracking-[0.2em] text-neutral-200">
+            <span className="hidden md:inline">Dhanush Chandra Shekar</span>
+            <span className="md:hidden">Dhanush C.</span>
+          </span>
         </a>
-      </div>
 
-      {/* Centered links */}
-      <nav className="header-nav-container">
-        <ul className="header-nav-list">
-          {tabs.map((tab, index) => {
-            const isActive = activeTab === index
-            return (
-              <li key={tab.id}>
-                <a
-                  href={`#${tab.id}`}
-                  onClick={(e) => handleNav(e, tab.id)}
-                  className="nav-text"
-                  style={{
-                    fontSize: '0.88rem',
-                    fontWeight: isActive ? 'bold' : '500',
-                    color: isActive ? 'var(--color-text-primary)' : 'var(--color-text-muted)',
-                    borderBottom: isActive ? '1.5px solid var(--color-border)' : '1.5px solid transparent',
-                    paddingBottom: '2px',
-                    transition: 'all 0.2s ease',
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  {tab.label}
-                </a>
-              </li>
-            )
-          })}
-        </ul>
-      </nav>
+        <nav className="no-scrollbar w-full overflow-x-auto sm:w-auto">
+          <ul className="mx-auto flex w-max items-center gap-1">
+            {tabs.map((tab, index) => {
+              const isActive = activeTab === index
+              return (
+                <li key={tab.id}>
+                  <a
+                    href={`#${tab.id}`}
+                    onClick={(e) => handleNav(e, tab.id)}
+                    className={cn(
+                      'relative block whitespace-nowrap rounded-md px-3 py-1.5 text-[0.7rem] uppercase tracking-[0.18em] transition-colors',
+                      isActive ? 'bg-white/[0.06] text-white' : 'text-neutral-500 hover:text-neutral-200',
+                    )}
+                  >
+                    {tab.label}
+                  </a>
+                </li>
+              )
+            })}
+          </ul>
+        </nav>
+      </div>
     </header>
   )
 }

@@ -1,6 +1,10 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { useRef, useState } from 'react'
+import { AnimatePresence, motion, useMotionValueEvent, useScroll, useSpring, useTransform } from 'framer-motion'
+import { CircularGallery, type GalleryItem } from '@/components/ui/circular-gallery'
+import GlowCard from '@/components/GlowCard'
+import SectionHeader from '@/components/SectionHeader'
 
 const PROJECTS = [
   {
@@ -13,7 +17,6 @@ const PROJECTS = [
     tags: ['FASTAPI', 'REDIS', 'POSTGRESQL', 'PROMETHEUS', 'DOCKER'],
     href: 'https://github.com/dhanush1-2/LLM-Gateway',
     imageUrl: '/projects/llm_gateway.png',
-    gradient: 'linear-gradient(135deg, #f2f7ff 0%, #e1edff 100%)',
   },
   {
     index: '02',
@@ -25,7 +28,6 @@ const PROJECTS = [
     tags: ['LANGGRAPH', 'NEO4J', 'GROQ', 'CHROMADB', 'REACT'],
     href: 'https://github.com/dhanush1-2/OrgMind',
     imageUrl: '/projects/orgmind.png',
-    gradient: 'linear-gradient(135deg, #fffaf5 0%, #ffece0 100%)',
   },
   {
     index: '03',
@@ -37,7 +39,6 @@ const PROJECTS = [
     tags: ['NEXT.JS', 'TYPESCRIPT', 'SUPABASE', 'CLAUDE AI', 'DOCKER'],
     href: 'https://github.com/dhanush1-2/LodeAI',
     imageUrl: '/projects/lodeai.png',
-    gradient: 'linear-gradient(135deg, #fbf7ff 0%, #f0e1ff 100%)',
   },
   {
     index: '04',
@@ -49,7 +50,6 @@ const PROJECTS = [
     tags: ['NEO4J', 'CHROMADB', 'CLAUDE API', 'SENTENCE TRANSFORMERS'],
     href: 'https://github.com/dhanush1-2/GraphRAG',
     imageUrl: '/projects/graphrag.png',
-    gradient: 'linear-gradient(135deg, #fffbf2 0%, #ffeed1 100%)',
   },
   {
     index: '05',
@@ -61,7 +61,6 @@ const PROJECTS = [
     tags: ['PYTORCH', 'PYTHON', 'NLP', 'CUDA'],
     href: 'https://github.com/dhanush1-2/Transformer-model',
     imageUrl: '/projects/transformer.png',
-    gradient: 'linear-gradient(135deg, #f0fbf8 0%, #d8f5ee 100%)',
   },
   {
     index: '06',
@@ -73,7 +72,6 @@ const PROJECTS = [
     tags: ['XGBOOST', 'LIGHTGBM', 'FASTAPI', 'DOCKER', 'GITHUB ACTIONS'],
     href: 'https://github.com/dhanush1-2/Demand-Forecasting',
     imageUrl: '/projects/demand_forecasting.png',
-    gradient: 'linear-gradient(135deg, #fff5f5 0%, #ffe3e3 100%)',
   },
   {
     index: '07',
@@ -85,7 +83,6 @@ const PROJECTS = [
     tags: ['HUGGINGFACE', 'DISTILBERT', 'SCIKIT LEARN', 'NLPAUG'],
     href: 'https://github.com/dhanush1-2/mental-health-nlp',
     imageUrl: '/projects/mental_health_nlp.png',
-    gradient: 'linear-gradient(135deg, #fffcf0 0%, #fff2d1 100%)',
   },
   {
     index: '08',
@@ -97,7 +94,6 @@ const PROJECTS = [
     tags: ['PYTHON', 'POSTGRESQL', 'SQLALCHEMY', 'POWER BI', 'ETL'],
     href: 'https://github.com/dhanush1-2/InsightFlow',
     imageUrl: '/projects/insightflow.png',
-    gradient: 'linear-gradient(135deg, #f4fbf4 0%, #ddf2dd 100%)',
   },
   {
     index: '09',
@@ -109,107 +105,139 @@ const PROJECTS = [
     tags: ['PYTHON', 'SCIPY', 'STATSMODELS', 'POSTGRESQL', 'TABLEAU'],
     href: 'https://github.com/dhanush1-2/ab-testing',
     imageUrl: '/projects/ab_testing.png',
-    gradient: 'linear-gradient(135deg, #fff5f8 0%, #ffe3ed 100%)',
   },
 ]
 
+const GALLERY_ITEMS: GalleryItem[] = PROJECTS.map((p) => ({
+  id: p.index,
+  image: p.imageUrl,
+  title: p.title.split(':')[0],
+  caption: p.title.split(':')[1]?.trim() ?? '',
+  meta: p.status,
+  href: p.href,
+}))
+
+const STEP = 360 / PROJECTS.length
+
 export default function Projects() {
+  const trackRef = useRef<HTMLDivElement>(null)
+  const [active, setActive] = useState(0)
+
+  // Scrolling through the pinned track turns the ring from the first project to the last
+  const { scrollYProgress } = useScroll({ target: trackRef, offset: ['start start', 'end end'] })
+  const target = useTransform(scrollYProgress, [0, 1], [0, STEP * (PROJECTS.length - 1)])
+  const rotation = useSpring(target, { stiffness: 140, damping: 28, mass: 0.5 })
+
+  useMotionValueEvent(rotation, 'change', (r) => {
+    const i = Math.min(PROJECTS.length - 1, Math.max(0, Math.round(r / STEP)))
+    setActive((prev) => (prev === i ? prev : i))
+  })
+
+  // Jump the page scroll to the point where project i faces the front
+  const select = (i: number) => {
+    const track = trackRef.current
+    if (!track) return
+    const top = track.getBoundingClientRect().top + window.scrollY
+    const travel = track.offsetHeight - window.innerHeight
+    window.scrollTo({ top: top + (travel * i) / (PROJECTS.length - 1), behavior: 'smooth' })
+  }
+
+  const project = PROJECTS[active]
+
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+    <div>
+      <SectionHeader
+        index="01"
+        label="selected work"
+        title="Featured Projects"
+        description="Production ready architectures bridging LLMs, vector indexes, MLOps orchestration, and structured analytics. Scroll to turn the ring; every repository is open source on GitHub."
+      />
 
-      {/* Header */}
-      <div>
-        <span className="nav-text" style={{ fontSize: '0.72rem', color: 'var(--color-text-muted)', display: 'block', marginBottom: '8px' }}>
-          selected work
-        </span>
-        <h2 style={{ fontSize: '2.4rem', fontWeight: 'bold' }}>Featured Projects</h2>
-      </div>
+      <div ref={trackRef} className="relative overflow-x-clip" style={{ height: `${PROJECTS.length * 45 + 100}vh` }}>
+        <div className="sticky top-0 flex h-svh flex-col justify-center gap-6 pb-6 pt-28 sm:pt-24 lg:grid lg:grid-cols-[minmax(0,1fr)_380px] lg:items-center lg:gap-10 lg:pb-0">
+          {/* Ring */}
+          <div className="relative flex flex-col items-center gap-5">
+            <CircularGallery items={GALLERY_ITEMS} rotation={rotation} activeIndex={active} onSelect={select} />
 
-      <p className="mono-text" style={{ fontSize: '0.95rem', color: 'var(--color-text-muted)', maxWidth: '720px', lineHeight: 1.65 }}>
-        Production-ready architectures bridging LLMs, vector embedding indexes, MLOps orchestration, and structured analytics models. All repositories are open source on GitHub.
-      </p>
-
-      {/* Grid List */}
-      <div className="projects-grid">
-        {PROJECTS.map((project, idx) => (
-          <motion.a
-            key={project.index}
-            href={project.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="project-card"
-            style={{ background: project.gradient }}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-40px' }}
-            transition={{ duration: 0.45, delay: idx * 0.05, ease: 'easeOut' }}
-          >
-            <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%' }}>
-              <div>
-                {/* Card top row */}
-                <div className="project-card-header">
-                  <span className="mono-text" style={{ fontSize: '0.65rem', color: 'var(--color-text-muted)', fontWeight: 'bold' }}>
-                    {project.index}
-                  </span>
-                  <span className="project-arrow-badge">↗</span>
-                </div>
-
-                {/* Title */}
-                <h3 style={{ fontSize: '1.35rem', fontWeight: 'bold', marginTop: '16px', color: 'var(--color-text-primary)' }}>
-                  {project.title}
-                </h3>
-
-                {/* PAR case study block */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '16px' }}>
-                  <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
-                    <span className="mono-text par-label" style={{ color: 'var(--color-text-muted)', minWidth: '64px' }}>
-                      PROBLEM
-                    </span>
-                    <p style={{ fontSize: '0.875rem', lineHeight: '1.55', color: 'var(--color-text-muted)', margin: 0 }}>
-                      {project.problem}
-                    </p>
-                  </div>
-                  <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
-                    <span className="mono-text par-label" style={{ color: 'var(--color-text-muted)', minWidth: '64px' }}>
-                      ACTION
-                    </span>
-                    <p style={{ fontSize: '0.875rem', lineHeight: '1.55', color: 'var(--color-text-muted)', margin: 0 }}>
-                      {project.action}
-                    </p>
-                  </div>
-                  <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
-                    <span className="mono-text par-label" style={{ color: 'var(--color-text-primary)', minWidth: '64px', fontWeight: 'bold' }}>
-                      RESULT
-                    </span>
-                    <p style={{ fontSize: '0.875rem', lineHeight: '1.55', color: 'var(--color-text-primary)', margin: 0, fontWeight: 500 }}>
-                      {project.result}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Graphical illustration */}
-              <div className="project-image-container">
-                <img
-                  src={project.imageUrl}
-                  alt={project.title}
-                  className="project-image"
-                />
-              </div>
-
-              {/* Footer tags */}
-              <div style={{ borderTop: '1.5px solid rgba(17, 17, 17, 0.08)', paddingTop: '16px', marginTop: '20px', display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                {project.tags.map((t) => (
-                  <span key={t} className="tag-badge">
-                    {t}
-                  </span>
-                ))}
-              </div>
+            <div className="flex items-center gap-4 font-mono text-[0.62rem] uppercase tracking-[0.2em] text-neutral-500">
+              <button
+                type="button"
+                onClick={() => select(Math.max(0, active - 1))}
+                disabled={active === 0}
+                aria-label="Previous project"
+                className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 text-neutral-300 transition-colors hover:border-white/30 disabled:opacity-30"
+              >
+                ←
+              </button>
+              <span className="min-w-[64px] text-center">
+                <span className="text-neutral-200">{project.index}</span> / {String(PROJECTS.length).padStart(2, '0')}
+              </span>
+              <button
+                type="button"
+                onClick={() => select(Math.min(PROJECTS.length - 1, active + 1))}
+                disabled={active === PROJECTS.length - 1}
+                aria-label="Next project"
+                className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 text-neutral-300 transition-colors hover:border-white/30 disabled:opacity-30"
+              >
+                →
+              </button>
             </div>
-          </motion.a>
-        ))}
-      </div>
+          </div>
 
+          {/* Details for the project in front */}
+          <GlowCard className="shrink-0">
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div
+                key={project.index}
+                className="relative z-20 flex flex-col gap-4 p-5 md:p-7"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.25, ease: 'easeOut' }}
+              >
+                <div className="flex items-center justify-between font-mono text-[0.6rem] uppercase tracking-[0.2em]">
+                  <span className="text-neutral-500">Project {project.index}</span>
+                  <span className="flex items-center gap-1.5 text-neutral-400">
+                    <span className={project.status === 'DEPLOYED' ? 'h-1.5 w-1.5 rounded-full bg-emerald-400' : 'h-1.5 w-1.5 rounded-full bg-neutral-400'} />
+                    {project.status}
+                  </span>
+                </div>
+
+                <h3 className="font-heading text-xl font-normal leading-snug text-white">{project.title}</h3>
+
+                <dl className="flex flex-col gap-3 text-[0.82rem] font-extralight leading-relaxed">
+                  {(['problem', 'action', 'result'] as const).map((key) => (
+                    <div key={key} className={key === 'result' ? 'grid grid-cols-[64px_1fr] gap-3' : 'hidden grid-cols-[64px_1fr] gap-3 sm:grid'}>
+                      <dt className={key === 'result' ? 'pt-[3px] font-mono text-[0.6rem] uppercase tracking-[0.15em] text-neutral-300' : 'pt-[3px] font-mono text-[0.6rem] uppercase tracking-[0.15em] text-neutral-600'}>
+                        {key}
+                      </dt>
+                      <dd className={key === 'result' ? 'font-light text-neutral-200' : 'text-neutral-500'}>{project[key]}</dd>
+                    </div>
+                  ))}
+                </dl>
+
+                <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/[0.05] pt-4">
+                  <div className="flex flex-wrap gap-1.5">
+                    {project.tags.map((t) => (
+                      <span key={t} className="rounded-md border border-white/[0.07] bg-white/[0.02] px-2 py-0.5 font-mono text-[0.58rem] tracking-[0.08em] text-neutral-500">
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                  <a
+                    href={project.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="shrink-0 rounded-lg bg-neutral-100 px-3.5 py-2 text-[0.62rem] font-medium uppercase tracking-[0.2em] text-black transition-colors hover:bg-white"
+                  >
+                    GitHub ↗
+                  </a>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </GlowCard>
+        </div>
+      </div>
     </div>
   )
 }
